@@ -4,6 +4,7 @@ var Encore = require('@symfony/webpack-encore'); Encore
     .setPublicPath('/build')
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
+    .enableSassLoader()
     .addEntry('js/app', './assets/js/app.js')
     // .addStyleEntry('css/app', './assets/css/app.scss')
     // .enableSassLoader()

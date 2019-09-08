@@ -30,6 +30,13 @@ class User {
     private $password;
 
     /**
+     * @ORM\OneToOne(targetEntity="Invite", mappedBy="user_invited")
+     * @ORM\Column(type="string")
+     *
+     */
+    private $invite_code;
+
+    /**
      * @ORM\OneToOne(targetEntity="UserInfo", inversedBy="user", cascade={"remove", "persist"})
      * @ORM\JoinColumn(name="user_info_id", referencedColumnName="id", onDelete="CASCADE")
      */
@@ -87,6 +94,20 @@ class User {
     /**
      *@return mixed
      */
+    public function getInviteCode(){
+        return $this->invite_code;
+    }
+
+    /**
+     *@param mixed $invite_code
+     */
+    public function setInviteCode($invite_code){
+        $this->invite_code = $invite_code;
+    }
+
+    /**
+     *@return mixed
+     */
     public function getUserInfo(){
         return $this->user_info;
     }
@@ -127,8 +148,8 @@ class User {
         return [
             'id' => $this->id,
             'email' => $this->email,
-            'user_info' => $this->user_info,
-            'invites' => $this->invites
+            'invite_code' => $this->invite_code,
+            'user_info_id' => $this->user_info->getId()
         ];
     }
 }

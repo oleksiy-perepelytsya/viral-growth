@@ -25,12 +25,12 @@ class UserInfo {
     private $name;
 
     /**
-     *@ORM\Column(type="string")
+     *@ORM\Column(type="text")
      **/
     private $description;
 
     /**
-     *@ORM\Column(type="string")
+     *@ORM\Column(type="string", nullable=true)
      **/
     private $photos;
 
@@ -113,8 +113,8 @@ class UserInfo {
     public function toArray(){
         return [
             'id' => $this->id,
-            'description' => $this->description,
-            'user' => $this->user
+            'name' => $this->name,
+            'description' => $this->description
         ];
     }
 }

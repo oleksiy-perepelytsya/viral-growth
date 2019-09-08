@@ -3,7 +3,10 @@
 namespace App\Controller\API;
 
 use App\Entity\User;
+use App\Entity\UserInfo;
+use App\Entity\Invite;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,19 +18,41 @@ final class UserController extends AbstractController
     public function userCreate()
     {
         $request = Request::createFromGlobals();
-        $email = $request->request->get('email');
-        $password = $request->request->get('password');
+        $form = json_decode($request->getContent());
 
-        if(!$email || !$password){
-            return $this->json(['status' => Response::HTTP_BAD_REQUEST]);
+        if(!$form->email || !$form->password || !$form->password2){
+            return $this->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => 'Provide email and password']);
+        }
+
+        if($form->password != $form->password2){
+            return $this->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => 'Passwords do not match']);
         }
 
         $entityManager = $this->getDoctrine()->getManager();
+
         $user = new User();
-        $user->setEmail($email);
-        $user->setEmail($password);
+        $user->setEmail($form->email);
+        $user->setPassword($form->password);
+
+        $invite = $entityManager->getRepository(Invite::class)->findOneBy(['code' => $form->code]);
+
+        if(!$invite){
+            return $this->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => 'Viral Code is wrong, it does nothing!']);
+        }
+
+        $user->setInviteCode($invite->getCode());
+        $userInfo = new UserInfo();
+        $userInfo->setName($form->name);
+        $userInfo->setDescription($form->description);
+
+        $user->setUserInfo($userInfo);
         $entityManager->persist($user);
         $entityManager->flush();
+
+        $this->forward('App\Controller\API\InviteController::setInviteStatus', [
+            'id'  => $invite->getId(),
+            'status' => Invite::STATUS_USED,
+        ]);
 
         return $this->json(['status' => Response::HTTP_OK, 'id' => $user->getId()]);
     }

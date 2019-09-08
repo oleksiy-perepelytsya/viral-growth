@@ -13,7 +13,8 @@ class InviteRepository extends EntityRepository
      * @return int
      */
     public function generateCode(Invite $invite){
-        return random_int(1, 100);
+        $salt = getenv('INVITE_SALT');
+        return md5(uniqid($invite->getId(), true) . $salt);
     }
 
 }

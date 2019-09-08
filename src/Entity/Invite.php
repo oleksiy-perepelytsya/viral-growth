@@ -6,11 +6,19 @@ use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- *@ORM\Entity
+ *@ORM\Entity(repositoryClass="App\Repository\InviteRepository")
  *@ORM\Table(name="invites")
  */
 
 class Invite {
+
+    const STATUS_ACTIVE = 'active';
+    const STATUS_USED = 'used';
+
+    const ALLOWED_STATUSES = [
+        self::STATUS_ACTIVE,
+        self::STATUS_USED
+    ];
 
     /**
      *@ORM\Column(type="integer")
@@ -20,9 +28,16 @@ class Invite {
     private $id;
 
     /**
+     *@ORM\OneToOne(targetEntity="User", inversedBy="invite_code")
+     *@ORM\JoinColumn(name="code", referencedColumnName="invite_code")
      *@ORM\Column(type="string")
      **/
     private $code;
+
+    /**
+     *@ORM\Column(type="string")
+     **/
+    private $status;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="invites")
@@ -62,6 +77,20 @@ class Invite {
     /**
      *@return mixed
      */
+    public function getStatus(){
+        return $this->status;
+    }
+
+    /**
+     *@param mixed $status
+     */
+    public function setStatus($status){
+        $this->status = $status;
+    }
+
+    /**
+     *@return mixed
+     */
     public function getUser(){
         return $this->user;
     }
@@ -80,7 +109,7 @@ class Invite {
         return [
             'id' => $this->id,
             'code' => $this->code,
-            'user' => $this->user
+            'status' => $this->status
         ];
     }
 }
