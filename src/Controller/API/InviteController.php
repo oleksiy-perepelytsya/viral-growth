@@ -28,8 +28,9 @@ final class InviteController extends AbstractController
 
         $invite->setCode($entityManager->getRepository(Invite::class)->generateCode($invite));
         $invite->setStatus(Invite::STATUS_ACTIVE);
-        $user->addInvite($invite);
-        $entityManager->persist($user);
+        $invite->setUser($user);
+
+        $entityManager->persist($invite);
         $entityManager->flush();
 
         return $this->json(['status' => Response::HTTP_OK, 'resource' => $invite->toArray()]);

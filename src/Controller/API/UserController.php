@@ -37,7 +37,11 @@ final class UserController extends AbstractController
         $invite = $entityManager->getRepository(Invite::class)->findOneBy(['code' => $form->code]);
 
         if(!$invite){
-            return $this->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => 'Viral Code is wrong, it does nothing!']);
+            return $this->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => 'Viral Code is not valid!']);
+        }
+
+        if($invite->getStatus() == Invite::STATUS_USED){
+            return $this->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => 'Viral Code has been already used!']);
         }
 
         $user->setInviteCode($invite->getCode());

@@ -1,16 +1,22 @@
 <template>
-    <div>
-        <p>This is an user info</p>
-        <span v-html="user.email"></span>
-        <span v-html="user_info.name"></span>
-        <span v-html="user_info.description"></span>
-
-        <Invites />
+    <div class="row">
+        <div class="col-md-8">
+            <h2><span v-html="user_info.name"></span></h2>
+            <div><img src="https://picsum.photos/id/1005/600/400"/></div>
+            <hr />
+            <ul class="list-group">
+                <li class="list-group-item flex-column"><span v-html="user_info.description"></span></li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <Invites />
+        </div>
     </div>
 </template>
 <script>
     import axios from 'axios';
     import Invites from "./invites";
+    import Vue from "vue";
 
     export default {
         name: "user-info",
@@ -30,13 +36,17 @@
             }
         },
         created () {
-            axios.get('http://viral-growth.com/user/2')
+            Vue.loading = true;
+
+            axios.get('http://viral-growth.com/user/' + Vue.user_id)
                 .then(response => {
                     this.user = response.data.resource;
                     return axios.get('http://viral-growth.com/user-info/' + this.user.user_info_id)
                 })
                 .then(response => (this.user_info = response.data.resource))
                 .catch((err) => {});
+
+            Vue.loading = false;
         }
     }
 </script>
