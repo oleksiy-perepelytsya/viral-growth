@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div class="row">
+        <hr />
         <div>
             <button v-on:click="createNewInvite" class="btn btn btn-success">Get new Viral Code!</button>
             <a href="http://viral-growth.com" class="btn btn-default">Logout</a>
@@ -8,7 +9,7 @@
         <h3>Viral Codes</h3>
         <span><b>Total:</b>{{ invites.length }}</span>
         <span><b>Infected:</b>{{ counterUsed }}</span>
-
+        <hr/>
         <ol id="viral-codes" class="list-group">
             <li v-for="invite in invites" class="list-group-item" :class="{ 'list-group-item-success' : invite.status == 'used'}">
                 {{ invite.code }}

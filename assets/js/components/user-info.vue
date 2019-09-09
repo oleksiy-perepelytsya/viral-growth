@@ -1,7 +1,9 @@
 <template>
     <div class="row">
         <div class="col-md-8">
-            <h2><span v-html="user_info.name"></span></h2>
+            <hr />
+            <div><h2><span v-html="user_info.name"></span></h2></div>
+            <hr />
             <div><img src="https://picsum.photos/600/400"/></div>
             <hr />
             <ul class="list-group">
