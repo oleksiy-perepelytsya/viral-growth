@@ -3,7 +3,7 @@ import router from "./router";
 import UserInfo from "./components/user-info";
 import Registration from "./components/registration";
 import Invites from "./components/invites";
-import Login from "./components/login"
+import Login from "./components/login";
 
 /**
  * Create a fresh Vue Application instance

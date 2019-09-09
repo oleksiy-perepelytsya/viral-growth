@@ -17,6 +17,7 @@ final class UserController extends AbstractController
      */
     public function userCreate()
     {
+        $entityManager = $this->getDoctrine()->getManager();
         $request = Request::createFromGlobals();
         $form = json_decode($request->getContent());
 
@@ -28,7 +29,11 @@ final class UserController extends AbstractController
             return $this->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => 'Passwords do not match']);
         }
 
-        $entityManager = $this->getDoctrine()->getManager();
+        $existedUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $form->email]);
+
+        if($existedUser){
+            return $this->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => 'Email already in use']);
+        }
 
         $user = new User();
         $user->setEmail($form->email);

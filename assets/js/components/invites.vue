@@ -7,7 +7,7 @@
         <hr/>
         <h3>Viral Codes</h3>
         <span><b>Total:</b>{{ invites.length }}</span>
-        <span><b>Used:</b>{{ counterUsed }}</span>
+        <span><b>Infected:</b>{{ counterUsed }}</span>
 
         <ol id="viral-codes" class="list-group">
             <li v-for="invite in invites" class="list-group-item" :class="{ 'list-group-item-success' : invite.status == 'used'}">
