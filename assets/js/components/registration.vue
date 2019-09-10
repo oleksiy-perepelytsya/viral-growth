@@ -6,7 +6,6 @@
             <div v-if="this.output" class="alert alert-danger" role="alert">
                 {{output}}
             </div>
-
             <div class="form-group input-group-lg">
                 <input required v-model="form.code" type="text" aria-label="Large" class="form-control" id="code" placeholder="Viral Code">
             </div>
@@ -28,16 +27,17 @@
                 <label for="description">Description</label>
                 <textarea required v-model="form.description" class="form-control" id="description" rows="3"></textarea>
             </div>
-
-            <hr/>
             <button type="submit" class="btn btn-primary">Go! Go! Go!</button>
+            <hr />
+            <router-link to="/login" class="btn btn-default">
+                Log in
+            </router-link>
         </div>
         <div class="col col-lg-3"></div>
     </form>
 </template>
 <script>
     import Vue from "vue";
-    import axios from 'axios';
     import router from "../router";
 
     export default {
@@ -59,19 +59,23 @@
             formSubmit(e) {
                 e.preventDefault();
                 let currentObj = this;
+                currentObj.$root.loading = true;
 
-                axios.post('http://viral-growth.com/user/create', currentObj.form)
+                this.$http.post('http://viral-growth2.com/user/create', currentObj.form)
                     .then(function (response) {
                         if(response.data.id){
-                            Vue.user_id = response.data.id;
-                            Vue.isAuthenticated = true;
+                            localStorage.setItem('user_id', response.data.id);
+                            localStorage.setItem('isAuthenticated', true);
                             router.push('/user');
                         }
 
                         currentObj.output = response.data.message;
+                        currentObj.$root.loading = false;
                     })
                     .catch(function (error) {
                         currentObj.output = error;
+                        currentObj.$root.loading = false;
+                        localStorage.setItem('isAuthenticated', false);
                     });
             }
         }

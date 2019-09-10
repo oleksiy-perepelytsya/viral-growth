@@ -7,29 +7,13 @@ import Login from "../components/login"
 
 Vue.use(VueRouter);
 
-const ifNotAuthenticated = (to, from, next) => {
-    if (!Vue.isAuthenticated) {
-        next()
-        return
-    }
-    next('/')
-}
-
-const ifAuthenticated = (to, from, next) => {
-    if (Vue.isAuthenticated) {
-        next()
-        return
-    }
-    next('/user')
-}
-
 export default new VueRouter({
     mode: "history",
     routes: [
-        { name: 'login', path: "/", component: Login, beforeEnter: ifNotAuthenticated },
-        { name: 'registration', path: "/registration", component: Registration, beforeEnter: ifNotAuthenticated },
-        { name: 'user-info', path: "/user", component: UserInfo, beforeEnter: ifAuthenticated },
-        { name: 'generate-invite-code', path: "/generate-invite-code", component: Invites, beforeEnter: ifAuthenticated },
+        { name: 'login', path: "/", component: Login, beforeEnter: Vue.$ifNotAuthenticated },
+        { name: 'registration', path: "/registration", component: Registration, beforeEnter: Vue.$ifNotAuthenticated },
+        { name: 'user', path: "/user", component: UserInfo, beforeEnter: Vue.$ifAuthenticated },
+        { name: 'generate-invite-code', path: "/generate-invite-code", component: Invites, beforeEnter: Vue.$ifAuthenticated },
         { path: '*', redirect: { path: "/" }}
     ]
 });

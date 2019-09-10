@@ -3,11 +3,11 @@
         <hr />
         <div>
             <button v-on:click="createNewInvite" class="btn btn btn-success">Get new Viral Code!</button>
-            <a href="http://viral-growth.com" class="btn btn-default">Logout</a>
+            <a href="http://viral-growth2.com" class="btn btn-default">Logout</a>
         </div>
         <hr/>
         <h3>Viral Codes</h3>
-        <span><b>Total:</b>{{ invites.length }}</span>
+        <span><b>Total:</b>{{ invitesTotalCount }}</span>
         <span><b>Infected:</b>{{ counterUsed }}</span>
         <hr/>
         <ol id="viral-codes" class="list-group">
@@ -19,7 +19,6 @@
     </div>
 </template>
 <script>
-    import axios from 'axios';
     import Vue from "vue";
 
     export default {
@@ -33,7 +32,7 @@
         created () {
             let currentObj = this;
 
-            axios.get('http://viral-growth.com/invite/user/' + Vue.user_id)
+            this.$http.get('http://viral-growth2.com/invite/user/' + localStorage.getItem('user_id'))
              .then(function (response) {
                  currentObj.invites = response.data.resource;
 
@@ -48,7 +47,7 @@
             createNewInvite: function() {
                 let currentObj = this;
 
-                axios.get('http://viral-growth.com/invite/create/user/' + Vue.user_id)
+                this.$http.get('http://viral-growth2.com/invite/create/user/' + localStorage.getItem('user_id'))
                     .then(function (response) {
                         currentObj.invites.unshift(response.data.resource)
                         alert('Share your new Viral Code: ' + response.data.resource.code);
@@ -59,7 +58,14 @@
         },
         watch: {
             counterUsed: function(){
-
+            }
+        },
+        computed: {
+            invitesTotalCount: function(){
+                if (this.invites === undefined) {
+                   return 0;
+                }
+                return this.invites.length;
             }
         }
     }

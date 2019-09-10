@@ -2,10 +2,10 @@
     <div>
         <div class="col col-lg-4"></div>
         <div class="col-lg-4 ml-auto">
-            <div v-if="this.output" class="alert alert-danger" role="alert">
-                {{output}}
-            </div>
             <form class="row" @submit.prevent="login">
+                <div v-if="this.output" class="alert alert-danger" role="alert">
+                    {{output}}
+                </div>
                 <div class="form-group">
                     <label for="email" class="sr-only">Email address</label>
                     <input v-model="form.email" type="email" id="email" class="form-control" placeholder="Email address" required autofocus>
@@ -16,7 +16,7 @@
                 </div>
                 <button class="btn btn-md btn-primary" type="submit">Log in</button>
                 <hr />
-                <router-link to="/registration">
+                <router-link to="/registration" class="btn btn-default">
                     Registration
                 </router-link>
             </form>
@@ -26,8 +26,6 @@
 </template>
 
 <script>
-    import Vue from "vue";
-    import axios from 'axios';
     import router from "../router";
 
     export default {
@@ -46,21 +44,26 @@
                 e.preventDefault();
                 let currentObj = this;
 
-                axios.post('http://viral-growth.com/auth', currentObj.form)
+                currentObj.output = '';
+                currentObj.$root.loading = true;
+
+                this.$http.post('http://viral-growth2.com/auth', currentObj.form)
                     .then(function (response) {
                         if(!response.data.id){
-                            Vue.isAuthenticated = false;
+                            localStorage.setItem('isAuthenticated', false);
                             currentObj.output = response.data.message;
                         }else{
-                            Vue.user_id = response.data.id;
-                            Vue.isAuthenticated = true;
+                            localStorage.setItem('user_id', response.data.id);
+                            localStorage.setItem('isAuthenticated', true);
                             router.push('/user');
                         }
+                        currentObj.$root.loading = false;
                     })
                     .catch(function (error) {
-                        Vue.isAuthenticated = false;
-                        currentObj.output = error;
+                        localStorage.setItem('isAuthenticated', false);
+                        currentObj.$root.loading = false;
                     });
+
             }
         }
     }

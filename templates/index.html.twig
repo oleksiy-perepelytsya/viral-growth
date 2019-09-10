@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 {% block body %}
         <div class="text-center">
-            <div class="jumbotron text-center">
-                <h1>Go Viral!</h1>
+            <div class="jumbotron text-center" style="min-height:240px; padding-top:20px; padding-bottom:20px;">
                 <div class="container">
-                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    </nav>
+                    <div><h1>Go Viral!</h1></div>
+                    <div class="spin" style="width:100px; margin:auto;">
+                        <pacman-loader :loading="loading" :color="color" :size="size"></pacman-loader>
+                    </div>
                 </div>
             </div>
 

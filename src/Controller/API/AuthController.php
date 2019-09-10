@@ -23,10 +23,17 @@ final class AuthController extends AbstractController
         }
 
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $form->email, 'password' => $form->password]);
+
+        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $form->email]);
 
         if(!$user){
             return $this->json(['status' => Response::HTTP_NOT_FOUND, 'message' => 'User not found']);
+        }
+
+        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $form->email, 'password' => $form->password]);
+
+        if(!$user){
+            return $this->json(['status' => Response::HTTP_NOT_FOUND, 'message' => 'Wrong password']);
         }
 
         return $this->json(['status' => Response::HTTP_OK, 'id' => $user->getId()]);

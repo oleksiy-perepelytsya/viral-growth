@@ -16,7 +16,6 @@
     </div>
 </template>
 <script>
-    import axios from 'axios';
     import Invites from "./invites";
     import Vue from "vue";
 
@@ -38,17 +37,17 @@
             }
         },
         created () {
-            Vue.loading = true;
+            let currentObj = this;
+            currentObj.$root.loading = true;
 
-            axios.get('http://viral-growth.com/user/' + Vue.user_id)
+            this.$http.get('http://viral-growth2.com/user/' + localStorage.getItem('user_id'))
                 .then(response => {
                     this.user = response.data.resource;
-                    return axios.get('http://viral-growth.com/user-info/' + this.user.user_info_id)
+                    currentObj.$root.loading = false;
+                    return this.$http.get('http://viral-growth2.com/user-info/' + this.user.user_info_id)
                 })
                 .then(response => (this.user_info = response.data.resource))
                 .catch((err) => {});
-
-            Vue.loading = false;
         }
     }
 </script>

@@ -1,25 +1,64 @@
 import Vue from "vue";
+import Vuex from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
+import axios from 'axios';
 import router from "./router";
 import UserInfo from "./components/user-info";
 import Registration from "./components/registration";
 import Invites from "./components/invites";
 import Login from "./components/login";
+import PacmanLoader from 'vue-spinner/src/PacmanLoader.vue'
 
-/**
- * Create a fresh Vue Application instance
- */
-new Vue({
-    el: '#app',
-    components: {Login, UserInfo, Registration, Invites},
-    router,
-    data: {
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
+    state:{
         user_id: '',
         isAuthenticated: false,
-        loading: false
     },
-    created: function () {
-        if (this.isAuthenticated) {
-            this.$router.push('/user')
+    plugins: [createPersistedState()]
+});
+
+
+Vue.prototype.$ifNotAuthenticated = (to, from, next) => {
+    if (localStorage.getItem('isAuthenticated')) {
+        next();
+        return;
+    }
+    if(to.path !== "/login"){
+        next('/');
+    }
+}
+
+Vue.prototype.$ifAuthenticated = (to, from, next) => {
+    if (localStorage.getItem('isAuthenticated')) {
+        next();
+        return;
+    }
+    if(to.path !== "/login"){
+        next('/');
+    }
+}
+
+Vue.prototype.$http = axios;
+
+new Vue({
+    el: '#app',
+    components: {Login, UserInfo, Registration, Invites, PacmanLoader},
+    router,
+    methods: {
+        showSpinner() {
+            this.loading = true;
+        },
+        hideSpinner() {
+            this.loading = false;
+        }
+    },
+    data: () => {
+        return {
+            color: '#5cb85c',
+            size: '25px',
+            loading: false
         }
     },
 });
