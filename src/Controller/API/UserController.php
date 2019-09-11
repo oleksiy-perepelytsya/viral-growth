@@ -29,9 +29,9 @@ final class UserController extends AbstractController
             return $this->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => 'Passwords do not match']);
         }
 
-        $existedUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $form->email]);
+        $userExists = $entityManager->getRepository(User::class)->findOneBy(['email' => $form->email]);
 
-        if($existedUser){
+        if($userExists){
             return $this->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => 'Email already in use']);
         }
 

@@ -17,7 +17,6 @@
 </template>
 <script>
     import Invites from "./invites";
-    import Vue from "vue";
 
     export default {
         name: "user-info",
@@ -40,11 +39,11 @@
             let currentObj = this;
             currentObj.$root.loading = true;
 
-            this.$http.get('http://viral-growth2.com/user/' + localStorage.getItem('user_id'))
+            this.$http.get(currentObj.$baseUrl + 'user/' + localStorage.getItem('user_id'))
                 .then(response => {
                     this.user = response.data.resource;
                     currentObj.$root.loading = false;
-                    return this.$http.get('http://viral-growth2.com/user-info/' + this.user.user_info_id)
+                    return this.$http.get(currentObj.$baseUrl + 'user-info/' + this.user.user_info_id)
                 })
                 .then(response => (this.user_info = response.data.resource))
                 .catch((err) => {});

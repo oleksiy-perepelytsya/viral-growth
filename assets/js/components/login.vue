@@ -47,7 +47,7 @@
                 currentObj.output = '';
                 currentObj.$root.loading = true;
 
-                this.$http.post('http://viral-growth2.com/auth', currentObj.form)
+                this.$http.post(currentObj.$baseUrl + 'auth', currentObj.form)
                     .then(function (response) {
                         if(!response.data.id){
                             localStorage.setItem('isAuthenticated', false);

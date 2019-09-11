@@ -41,6 +41,7 @@ Vue.prototype.$ifAuthenticated = (to, from, next) => {
 }
 
 Vue.prototype.$http = axios;
+Vue.prototype.$baseUrl = 'http://viral-growth2.com/';
 
 new Vue({
     el: '#app',

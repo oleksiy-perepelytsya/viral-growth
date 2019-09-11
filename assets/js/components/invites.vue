@@ -19,8 +19,6 @@
     </div>
 </template>
 <script>
-    import Vue from "vue";
-
     export default {
         name: "invites",
         data () {
@@ -32,7 +30,7 @@
         created () {
             let currentObj = this;
 
-            this.$http.get('http://viral-growth2.com/invite/user/' + localStorage.getItem('user_id'))
+            this.$http.get(currentObj.$baseUrl + 'invite/user/' + localStorage.getItem('user_id'))
              .then(function (response) {
                  currentObj.invites = response.data.resource;
 
@@ -47,7 +45,7 @@
             createNewInvite: function() {
                 let currentObj = this;
 
-                this.$http.get('http://viral-growth2.com/invite/create/user/' + localStorage.getItem('user_id'))
+                this.$http.get(currentObj.$baseUrl + 'invite/create/user/' + localStorage.getItem('user_id'))
                     .then(function (response) {
                         currentObj.invites.unshift(response.data.resource)
                         alert('Share your new Viral Code: ' + response.data.resource.code);

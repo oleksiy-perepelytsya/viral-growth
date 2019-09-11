@@ -30,9 +30,7 @@ final class AuthController extends AbstractController
             return $this->json(['status' => Response::HTTP_NOT_FOUND, 'message' => 'User not found']);
         }
 
-        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $form->email, 'password' => $form->password]);
-
-        if(!$user){
+        if($user->getPassword() != $form->password){
             return $this->json(['status' => Response::HTTP_NOT_FOUND, 'message' => 'Wrong password']);
         }
 

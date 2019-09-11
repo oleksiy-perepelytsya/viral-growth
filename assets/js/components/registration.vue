@@ -37,7 +37,6 @@
     </form>
 </template>
 <script>
-    import Vue from "vue";
     import router from "../router";
 
     export default {
@@ -61,7 +60,7 @@
                 let currentObj = this;
                 currentObj.$root.loading = true;
 
-                this.$http.post('http://viral-growth2.com/user/create', currentObj.form)
+                this.$http.post( currentObj.$baseUrl + 'user/create', currentObj.form)
                     .then(function (response) {
                         if(response.data.id){
                             localStorage.setItem('user_id', response.data.id);
